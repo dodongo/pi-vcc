@@ -1,5 +1,5 @@
 import { describe, it, expect } from "bun:test";
-import { getActiveLineageEntryIds } from "../src/core/lineage";
+import { getActiveLineageEntryIds, getActiveLineageEntryIdsFromEntries } from "../src/core/lineage";
 
 describe("getActiveLineageEntryIds", () => {
   it("returns IDs from active branch", () => {
@@ -29,5 +29,18 @@ describe("getActiveLineageEntryIds", () => {
       },
     });
     expect(ids.size).toBe(0);
+  });
+});
+
+describe("getActiveLineageEntryIdsFromEntries", () => {
+  it("walks from the latest entry through its parents", () => {
+    const entries = [
+      { id: "root" },
+      { id: "kept", parentId: "root" },
+      { id: "other", parentId: "root" },
+      { id: "leaf", parentId: "kept" },
+    ];
+
+    expect(getActiveLineageEntryIdsFromEntries(entries)).toEqual(new Set(["leaf", "kept", "root"]));
   });
 });

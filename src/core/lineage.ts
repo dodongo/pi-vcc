@@ -1,5 +1,6 @@
 export interface LineageEntryLike {
   id?: string;
+  parentId?: string | null;
 }
 
 export interface LineageSessionManagerLike {
@@ -23,4 +24,17 @@ export const getActiveLineageEntryIds = (sessionManager: LineageSessionManagerLi
   } catch {
     return new Set();
   }
+};
+
+export const getActiveLineageEntryIdsFromEntries = (entries: LineageEntryLike[]): Set<string> => {
+  const byId = new Map(entries.flatMap((entry) => entry.id ? [[entry.id, entry] as const] : []));
+  let entry = entries.findLast((candidate) => candidate.id);
+  const ids = new Set<string>();
+
+  while (entry?.id && !ids.has(entry.id)) {
+    ids.add(entry.id);
+    entry = entry.parentId ? byId.get(entry.parentId) : undefined;
+  }
+
+  return ids;
 };

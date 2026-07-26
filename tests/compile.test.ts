@@ -78,12 +78,12 @@ describe("compile", () => {
     expect(r).toContain("latest");
   });
 
-  it("wraps final output without referring to an unavailable recall tool", () => {
+  it("points to the on-demand recall skill instead of a model tool", () => {
     const r = compile({
       messages: [userMsg("check final summary wrapping")],
     });
     const maxLineLength = Math.max(...r.split("\n").map((line) => line.length));
-    expect(r).toContain("Do not redo work already completed.");
+    expect(r).toContain("Load the `vcc-recall` skill");
     expect(r).not.toContain("vcc_recall");
     expect(maxLineLength).toBeLessThanOrEqual(120);
   });

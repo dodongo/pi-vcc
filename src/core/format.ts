@@ -46,7 +46,8 @@ export const capBrief = (text: string): string => {
   return `...(${omitted} earlier lines omitted)\n\n${clean.join("\n")}`;
 };
 
-export const RECALL_NOTE = "Do not redo work already completed.";
+export const RECALL_NOTE =
+  "Load the `vcc-recall` skill when prior detail is needed. Do not redo work already completed.";
 
 export interface FormatSummaryOptions {
   capBriefTranscript?: boolean;
